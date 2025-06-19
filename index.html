@@ -24,8 +24,15 @@
       text-align: center;
       color: #2a3b4c;
       letter-spacing: 1px;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       font-size: 2rem;
+    }
+    h2 {
+      text-align: center;
+      color: #2a3b4c;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
     }
     form label {
       display: flex;
@@ -119,6 +126,7 @@
 <body>
   <div class="container">
     <h1>H1 Grade Simulator</h1>
+    <h2>Algebra / Trig</h2>
     <form id="gradeForm" onsubmit="event.preventDefault(); calculate();">
       <label>Midterm (%) <input type="number" id="midterm" min="0" max="100"></label>
       <label>Webassign (%) <input type="number" id="webassign" min="0" max="100"></label>
