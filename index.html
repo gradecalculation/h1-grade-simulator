@@ -120,10 +120,10 @@
   <div class="container">
     <h1>H1 Grade Simulator</h1>
     <form id="gradeForm" onsubmit="event.preventDefault(); calculate();">
-      <label>Midterm (%) <input type="number" id="midterm" value="100" min="0" max="100"></label>
-      <label>Webassign (%) <input type="number" id="webassign" value="97" min="0" max="100"></label>
-      <label>In-class test (out of 10) <input type="number" id="inclass" value="8" min="0" max="10"></label>
-      <label>Notebook (out of 5) <input type="number" id="notebook" value="0" min="0" max="5"></label>
+      <label>Midterm (%) <input type="number" id="midterm" min="0" max="100"></label>
+      <label>Webassign (%) <input type="number" id="webassign" min="0" max="100"></label>
+      <label>In-class test (out of 10) <input type="number" id="inclass" min="0" max="10"></label>
+      <label>Notebook (out of 5) <input type="number" id="notebook" min="0" max="5"></label>
       <button type="submit">Calculate</button>
     </form>
     <table>
@@ -152,11 +152,11 @@
       const inclass = parseFloat(document.getElementById('inclass').value) || 0;
       const notebook = parseFloat(document.getElementById('notebook').value) || 0;
 
-      // Score calculation
+      // 修正後の配点
       const currentScore =
-        midterm * 0.25 +
+        midterm * 0.3 +
         webassign * 0.25 +
-        inclass * 1.5 +
+        inclass * 1.0 +
         notebook * 1;
 
       const resultTable = document.getElementById('resultTable');
@@ -177,8 +177,7 @@
       });
     }
 
-    // Initial rendering
-    calculate();
+    // 初期表示はしない
   </script>
 </body>
 </html>
