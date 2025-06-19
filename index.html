@@ -11,30 +11,30 @@
       margin: 0;
       padding: 0;
       min-height: 100vh;
-      font-size: 14px; /* 全体の基本文字サイズを小さめに */
+      font-size: 16px; /* 元のサイズに戻す */
     }
     .container {
-      max-width: 400px;
-      margin: 28px auto;
+      max-width: 420px;
+      margin: 40px auto;
       background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 14px rgba(60, 72, 88, 0.08);
-      padding: 20px 16px 14px 16px; /* 余白をやや小さく */
+      border-radius: 14px;
+      box-shadow: 0 4px 24px rgba(60, 72, 88, 0.10);
+      padding: 32px 28px 24px 28px;
     }
     h1 {
       text-align: center;
       color: #2a3b4c;
       letter-spacing: 1px;
-      margin-bottom: 6px;
-      font-size: 1.25rem;
+      margin-bottom: 10px;
+      font-size: 2rem;
     }
     h2 {
       text-align: center;
       color: #4b77e3;
       letter-spacing: 1px;
-      margin-bottom: 10px;
+      margin-bottom: 18px;
       margin-top: 0;
-      font-size: 1.05rem;
+      font-size: 1.3rem;
       font-weight: 500;
     }
     .notice {
@@ -42,8 +42,8 @@
       color: #b38600;
       border-left: 4px solid #ffe066;
       padding: 8px 10px;
-      margin-bottom: 12px;
-      font-size: 0.93rem;
+      margin-bottom: 18px;
+      font-size: 0.93rem; /* 注意書きだけ小さめ */
       border-radius: 5px;
       box-shadow: 0 1px 3px rgba(255, 224, 102, 0.08);
       line-height: 1.5;
@@ -52,18 +52,18 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
-      font-size: 0.98rem;
+      margin-bottom: 16px;
+      font-size: 1.05rem;
       color: #3b4d61;
     }
     input[type="number"] {
-      width: 60px;
-      padding: 4px 6px;
+      width: 80px;
+      padding: 6px 8px;
       border: 1px solid #c5d0e6;
-      border-radius: 5px;
-      font-size: 0.95rem;
+      border-radius: 6px;
+      font-size: 1rem;
       background: #f8fafc;
-      margin-left: 8px;
+      margin-left: 10px;
       text-align: right;
       transition: border 0.2s;
     }
@@ -77,14 +77,14 @@
       background: linear-gradient(90deg, #6e9eff 0%, #4b77e3 100%);
       color: #fff;
       border: none;
-      border-radius: 7px;
-      padding: 8px 0;
-      font-size: 1rem;
+      border-radius: 8px;
+      padding: 12px 0;
+      font-size: 1.1rem;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 6px;
+      margin-top: 10px;
       letter-spacing: 0.5px;
-      box-shadow: 0 1px 4px rgba(110, 158, 255, 0.06);
+      box-shadow: 0 2px 8px rgba(110, 158, 255, 0.08);
       transition: background 0.2s;
     }
     button:hover {
@@ -92,28 +92,27 @@
     }
     table {
       width: 100%;
-      margin-top: 18px;
+      margin-top: 28px;
       border-collapse: separate;
       border-spacing: 0;
       background: #f8fafc;
-      border-radius: 7px;
+      border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 1px 5px rgba(60, 72, 88, 0.04);
-      font-size: 0.95rem;
+      box-shadow: 0 2px 10px rgba(60, 72, 88, 0.06);
     }
     th, td {
-      padding: 7px 0;
+      padding: 13px 0;
       text-align: center;
     }
     th {
       background: #eaf0fa;
       color: #3b4d61;
       font-weight: 600;
-      border-bottom: 1px solid #d1dbe8;
-      font-size: 0.98rem;
+      border-bottom: 1.5px solid #d1dbe8;
+      font-size: 1rem;
     }
     td {
-      font-size: 0.97rem;
+      font-size: 1.05rem;
       color: #2a3b4c;
       border-bottom: 1px solid #e7eaf1;
     }
@@ -122,25 +121,25 @@
     }
     @media (max-width: 600px) {
       .container {
-        padding: 10px 2vw 8px 2vw;
+        padding: 18px 6px 14px 6px;
       }
       h1 {
-        font-size: 1.05rem;
+        font-size: 1.3rem;
       }
       h2 {
-        font-size: 0.95rem;
+        font-size: 1.05rem;
       }
       .notice {
         font-size: 0.88rem;
         padding: 6px 4px;
       }
       input[type="number"] {
-        width: 45px;
-        font-size: 0.92rem;
+        width: 60px;
+        font-size: 0.95rem;
       }
       th, td {
-        padding: 4px 0;
-        font-size: 0.93rem;
+        padding: 8px 0;
+        font-size: 0.95rem;
       }
     }
   </style>
