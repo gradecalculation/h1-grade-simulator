@@ -1,38 +1,143 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>H1-8 Grade Simulator</title>
+  <title>H1 Grade Simulator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: sans-serif; margin: 2em; }
-    input { width: 4em; }
-    table { border-collapse: collapse; margin-top: 1em; }
-    th, td { border: 1px solid #ccc; padding: 0.5em; text-align: center; }
+    body {
+      background: #f4f6fb;
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 420px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 24px rgba(60, 72, 88, 0.10);
+      padding: 32px 28px 24px 28px;
+    }
+    h1 {
+      text-align: center;
+      color: #2a3b4c;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+      font-size: 2rem;
+    }
+    form label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      font-size: 1.05rem;
+      color: #3b4d61;
+    }
+    input[type="number"] {
+      width: 80px;
+      padding: 6px 8px;
+      border: 1px solid #c5d0e6;
+      border-radius: 6px;
+      font-size: 1rem;
+      background: #f8fafc;
+      margin-left: 10px;
+      text-align: right;
+      transition: border 0.2s;
+    }
+    input[type="number"]:focus {
+      outline: none;
+      border: 1.5px solid #6e9eff;
+      background: #eef3fe;
+    }
+    button {
+      width: 100%;
+      background: linear-gradient(90deg, #6e9eff 0%, #4b77e3 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 0;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(110, 158, 255, 0.08);
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: linear-gradient(90deg, #4b77e3 0%, #6e9eff 100%);
+    }
+    table {
+      width: 100%;
+      margin-top: 28px;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #f8fafc;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(60, 72, 88, 0.06);
+    }
+    th, td {
+      padding: 13px 0;
+      text-align: center;
+    }
+    th {
+      background: #eaf0fa;
+      color: #3b4d61;
+      font-weight: 600;
+      border-bottom: 1.5px solid #d1dbe8;
+      font-size: 1rem;
+    }
+    td {
+      font-size: 1.05rem;
+      color: #2a3b4c;
+      border-bottom: 1px solid #e7eaf1;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 18px 6px 14px 6px;
+      }
+      h1 {
+        font-size: 1.3rem;
+      }
+      input[type="number"] {
+        width: 60px;
+        font-size: 0.95rem;
+      }
+      th, td {
+        padding: 8px 0;
+        font-size: 0.95rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>H1-8 Grade Simulator</h1>
-  <form id="gradeForm">
-    <label>Midterm (%) <input type="number" id="midterm" value="100" min="0" max="100"></label><br>
-    <label>Webassign (%) <input type="number" id="webassign" value="97" min="0" max="100"></label><br>
-    <label>In-class test (out of 10) <input type="number" id="inclass" value="8" min="0" max="10"></label><br>
-    <label>Notebook (out of 5) <input type="number" id="notebook" value="0" min="0" max="5"></label><br>
-    <label>Final (%) <input type="number" id="final" value="0" min="0" max="100"></label><br>
-    <button type="button" onclick="calculate()">計算</button>
-  </form>
-
-  <table>
-    <thead>
-      <tr>
-        <th>Grade</th>
-        <th>Points required in Final</th>
-      </tr>
-    </thead>
-    <tbody id="resultTable"></tbody>
-  </table>
-
+  <div class="container">
+    <h1>H1 Grade Simulator</h1>
+    <form id="gradeForm" onsubmit="event.preventDefault(); calculate();">
+      <label>Midterm (%) <input type="number" id="midterm" value="100" min="0" max="100"></label>
+      <label>Webassign (%) <input type="number" id="webassign" value="97" min="0" max="100"></label>
+      <label>In-class test (out of 10) <input type="number" id="inclass" value="8" min="0" max="10"></label>
+      <label>Notebook (out of 5) <input type="number" id="notebook" value="0" min="0" max="5"></label>
+      <button type="submit">Calculate</button>
+    </form>
+    <table>
+      <thead>
+        <tr>
+          <th>Grade</th>
+          <th>Points required in Final</th>
+        </tr>
+      </thead>
+      <tbody id="resultTable"></tbody>
+    </table>
+  </div>
   <script>
-    // グレードごとの閾値
+    // Grade thresholds
     const thresholds = [
       { grade: 10, min: 89.5 },
       { grade: 9, min: 79.5 },
@@ -47,37 +152,32 @@
       const inclass = parseFloat(document.getElementById('inclass').value) || 0;
       const notebook = parseFloat(document.getElementById('notebook').value) || 0;
 
-      // 各項目の配点
-      // Midterm: 25%, Webassign: 25%, In-class: 10点満点→15%, Notebook: 5点満点→5%, Final: 30%
-      // 例: 8/10なら 8*1.5=12%
-      const currentScore = 
+      // Score calculation
+      const currentScore =
         midterm * 0.25 +
         webassign * 0.25 +
         inclass * 1.5 +
-        notebook * 1 +
-        0; // Finalはこれから計算
+        notebook * 1;
 
       const resultTable = document.getElementById('resultTable');
       resultTable.innerHTML = '';
 
       thresholds.forEach(({ grade, min }) => {
-        // 必要なFinalの得点を計算
-        // min = currentScore + final * 0.3
-        // final = (min - currentScore) / 0.3
+        // Calculate required final score
         let required = (min - currentScore) / 0.3;
-        required = Math.ceil(required * 10) / 10; // 少数第1位で切り上げ
+        required = Math.ceil(required); // Round up to integer
 
         let display;
         if (required > 100 || required < 0) {
           display = 'IMPOSSIBLE';
         } else {
-          display = required.toFixed(1) + ' %';
+          display = required;
         }
         resultTable.innerHTML += `<tr><td>${grade}</td><td>${display}</td></tr>`;
       });
     }
 
-    // 初期表示
+    // Initial rendering
     calculate();
   </script>
 </body>
