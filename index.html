@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>H1-8 Grade Simulator</title>
+  <style>
+    body { font-family: sans-serif; margin: 2em; }
+    input { width: 4em; }
+    table { border-collapse: collapse; margin-top: 1em; }
+    th, td { border: 1px solid #ccc; padding: 0.5em; text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>H1-8 Grade Simulator</h1>
+  <form id="gradeForm">
+    <label>Midterm (%) <input type="number" id="midterm" value="100" min="0" max="100"></label><br>
+    <label>Webassign (%) <input type="number" id="webassign" value="97" min="0" max="100"></label><br>
+    <label>In-class test (out of 10) <input type="number" id="inclass" value="8" min="0" max="10"></label><br>
+    <label>Notebook (out of 5) <input type="number" id="notebook" value="0" min="0" max="5"></label><br>
+    <label>Final (%) <input type="number" id="final" value="0" min="0" max="100"></label><br>
+    <button type="button" onclick="calculate()">計算</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Grade</th>
+        <th>Points required in Final</th>
+      </tr>
+    </thead>
+    <tbody id="resultTable"></tbody>
+  </table>
+
+  <script>
+    // グレードごとの閾値
+    const thresholds = [
+      { grade: 10, min: 89.5 },
+      { grade: 9, min: 79.5 },
+      { grade: 8, min: 69.5 },
+      { grade: 7, min: 59.5 },
+      { grade: 6, min: 49.5 }
+    ];
+
+    function calculate() {
+      const midterm = parseFloat(document.getElementById('midterm').value) || 0;
+      const webassign = parseFloat(document.getElementById('webassign').value) || 0;
+      const inclass = parseFloat(document.getElementById('inclass').value) || 0;
+      const notebook = parseFloat(document.getElementById('notebook').value) || 0;
+
+      // 各項目の配点
+      // Midterm: 25%, Webassign: 25%, In-class: 10点満点→15%, Notebook: 5点満点→5%, Final: 30%
+      // 例: 8/10なら 8*1.5=12%
+      const currentScore = 
+        midterm * 0.25 +
+        webassign * 0.25 +
+        inclass * 1.5 +
+        notebook * 1 +
+        0; // Finalはこれから計算
+
+      const resultTable = document.getElementById('resultTable');
+      resultTable.innerHTML = '';
+
+      thresholds.forEach(({ grade, min }) => {
+        // 必要なFinalの得点を計算
+        // min = currentScore + final * 0.3
+        // final = (min - currentScore) / 0.3
+        let required = (min - currentScore) / 0.3;
+        required = Math.ceil(required * 10) / 10; // 少数第1位で切り上げ
+
+        let display;
+        if (required > 100 || required < 0) {
+          display = 'IMPOSSIBLE';
+        } else {
+          display = required.toFixed(1) + ' %';
+        }
+        resultTable.innerHTML += `<tr><td>${grade}</td><td>${display}</td></tr>`;
+      });
+    }
+
+    // 初期表示
+    calculate();
+  </script>
+</body>
+</html>
