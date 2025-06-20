@@ -5,13 +5,14 @@
   <title>H1 Grade Simulator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    /* --- 省略（CSSは元のまま） --- */
     body {
       background: #f4f6fb;
       font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
       margin: 0;
       padding: 0;
       min-height: 100vh;
-      font-size: 16px; /* 元のサイズに戻す */
+      font-size: 16px;
     }
     .container {
       max-width: 420px;
@@ -43,7 +44,7 @@
       border-left: 4px solid #ffe066;
       padding: 8px 10px;
       margin-bottom: 18px;
-      font-size: 0.93rem; /* 注意書きだけ小さめ */
+      font-size: 0.93rem;
       border-radius: 5px;
       box-shadow: 0 1px 3px rgba(255, 224, 102, 0.08);
       line-height: 1.5;
@@ -187,7 +188,7 @@
     
       // 各項目ごとにMath.roundを適用
       const currentScore =
-        Math.round(midterm * 0.3)+
+        Math.round(midterm * 0.3) +
         Math.round(webassign * 0.25) +
         Math.round(inclass * 1.0) +
         Math.round(notebook * 1);
@@ -200,16 +201,12 @@
         let required = (min - currentScore) / 0.3;
         required = Math.ceil(required); // 最後のみMath.ceil
     
-        let display;
-        if (required > 100 || required < 0) {
-          display = 'IMPOSSIBLE';
-        } else {
-          display = required;
-        }
-        resultTable.innerHTML += `<tr><td>${grade}</td><td>${display}</td></tr>`;
+        // 0未満・100より大きい場合はスキップ
+        if (required < 0 || required > 100) return;
+
+        resultTable.innerHTML += `<tr><td>${grade}</td><td>${required}</td></tr>`;
       });
     }
-
     // 初期表示はしない
   </script>
 </body>
