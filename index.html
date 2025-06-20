@@ -185,12 +185,12 @@
       const inclass = parseFloat(document.getElementById('inclass').value) || 0;
       const notebook = parseFloat(document.getElementById('notebook').value) || 0;
     
-      // 各項目ごとにMath.ceilを適用
+      // 各項目ごとにMath.roundを適用
       const currentScore =
-        Math.ceil(midterm) * 0.3 +
-        Math.ceil(webassign) * 0.25 +
-        Math.ceil(inclass) * 1.0 +
-        Math.ceil(notebook) * 1;
+        Math.round(midterm) * 0.3 +
+        Math.round(webassign) * 0.25 +
+        Math.round(inclass) * 1.0 +
+        Math.round(notebook) * 1;
     
       const resultTable = document.getElementById('resultTable');
       resultTable.innerHTML = '';
@@ -198,7 +198,7 @@
       thresholds.forEach(({ grade, min }) => {
         // Calculate required final score
         let required = (min - currentScore) / 0.3;
-        required = Math.ceil(required); // Round up to integer
+        required = Math.ceil(required); // 最後のみMath.ceil
     
         let display;
         if (required > 100 || required < 0) {
