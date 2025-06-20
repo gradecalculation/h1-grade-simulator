@@ -187,10 +187,10 @@
     
       // 各項目ごとにMath.roundを適用
       const currentScore =
-        Math.round(midterm) * 0.3 +
-        Math.round(webassign) * 0.25 +
-        Math.round(inclass) * 1.0 +
-        Math.round(notebook) * 1;
+        Math.round(midterm * 0.3)+
+        Math.round(webassign * 0.25) +
+        Math.round(inclass * 1.0) +
+        Math.round(notebook * 1);
     
       const resultTable = document.getElementById('resultTable');
       resultTable.innerHTML = '';
