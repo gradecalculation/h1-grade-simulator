@@ -213,12 +213,10 @@
         lastGradeShown = grade;
       });
 
-      // 最後に表示されたGradeの一つ下を追加
-      if (lastGradeShown !== null) {
+      // 最後に表示されたGradeが3以外の場合のみ、その下のGradeと0を追加
+      if (lastGradeShown !== null && lastGradeShown > 3) {
         const nextGrade = lastGradeShown - 1;
-        if (nextGrade >= 0) {
-          resultTable.innerHTML += `<tr><td>${nextGrade}</td><td>0</td></tr>`;
-        }
+        resultTable.innerHTML += `<tr><td>${nextGrade}</td><td>0</td></tr>`;
       }
     }
     // 初期表示はしない
