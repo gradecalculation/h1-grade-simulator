@@ -184,22 +184,22 @@
       const webassign = parseFloat(document.getElementById('webassign').value) || 0;
       const inclass = parseFloat(document.getElementById('inclass').value) || 0;
       const notebook = parseFloat(document.getElementById('notebook').value) || 0;
-
-      // 修正後の配点
+    
+      // 各項目ごとにMath.ceilを適用
       const currentScore =
-        midterm * 0.3 +
-        webassign * 0.25 +
-        inclass * 1.0 +
-        notebook * 1;
-
+        Math.ceil(midterm) * 0.3 +
+        Math.ceil(webassign) * 0.25 +
+        Math.ceil(inclass) * 1.0 +
+        Math.ceil(notebook) * 1;
+    
       const resultTable = document.getElementById('resultTable');
       resultTable.innerHTML = '';
-
+    
       thresholds.forEach(({ grade, min }) => {
         // Calculate required final score
         let required = (min - currentScore) / 0.3;
         required = Math.ceil(required); // Round up to integer
-
+    
         let display;
         if (required > 100 || required < 0) {
           display = 'IMPOSSIBLE';
@@ -209,6 +209,7 @@
         resultTable.innerHTML += `<tr><td>${grade}</td><td>${display}</td></tr>`;
       });
     }
+
     // 初期表示はしない
   </script>
 </body>
