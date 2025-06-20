@@ -5,7 +5,7 @@
   <title>H1 Grade Simulator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* --- 省略（CSSは元のまま） --- */
+    /* --- CSSは元のままなので省略 --- */
     body {
       background: #f4f6fb;
       font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
@@ -171,13 +171,16 @@
     </table>
   </div>
   <script>
-    // Grade thresholds
+    // Grade thresholds (3～10まで)
     const thresholds = [
       { grade: 10, min: 89.5 },
       { grade: 9, min: 79.5 },
       { grade: 8, min: 69.5 },
       { grade: 7, min: 59.5 },
-      { grade: 6, min: 49.5 }
+      { grade: 6, min: 49.5 },
+      { grade: 5, min: 39.5 },
+      { grade: 4, min: 29.5 },
+      { grade: 3, min: 19.5 }
     ];
 
     function calculate() {
@@ -185,27 +188,38 @@
       const webassign = parseFloat(document.getElementById('webassign').value) || 0;
       const inclass = parseFloat(document.getElementById('inclass').value) || 0;
       const notebook = parseFloat(document.getElementById('notebook').value) || 0;
-    
+
       // 各項目ごとにMath.roundを適用
       const currentScore =
         Math.round(midterm * 0.3) +
         Math.round(webassign * 0.25) +
         Math.round(inclass * 1.0) +
         Math.round(notebook * 1);
-    
+
       const resultTable = document.getElementById('resultTable');
       resultTable.innerHTML = '';
-    
+
+      let lastGradeShown = null;
+
       thresholds.forEach(({ grade, min }) => {
         // Calculate required final score
         let required = (min - currentScore) / 0.3;
-        required = Math.ceil(required); // 最後のみMath.ceil
-    
+        required = Math.ceil(required);
+
         // 0未満・100より大きい場合はスキップ
         if (required < 0 || required > 100) return;
 
         resultTable.innerHTML += `<tr><td>${grade}</td><td>${required}</td></tr>`;
+        lastGradeShown = grade;
       });
+
+      // 最後に表示されたGradeの一つ下を追加
+      if (lastGradeShown !== null) {
+        const nextGrade = lastGradeShown - 1;
+        if (nextGrade >= 0) {
+          resultTable.innerHTML += `<tr><td>${nextGrade}</td><td>0</td></tr>`;
+        }
+      }
     }
     // 初期表示はしない
   </script>
