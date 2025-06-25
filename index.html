@@ -215,7 +215,10 @@
       { grade: 9, min: 79.5 },
       { grade: 8, min: 69.5 },
       { grade: 7, min: 59.5 },
-      { grade: 6, min: 49.5 }
+      { grade: 6, min: 49.5 },
+      { grade: 5, min: 39.5 },
+      { grade: 4, min: 29.5 },
+      { grade: 3, min: 19.5 }
     ];
 
     function switchMode() {
@@ -267,7 +270,7 @@
         total += Math.round(parseFloat(document.getElementById('sci' + i).value) || 0);
       }
       // 120点満点を100点満点に換算
-      const score100 = total * 100 / 120;
+      const score100 = total * 100 / 140;
 
       const resultTable = document.getElementById('resultTable');
       resultTable.innerHTML = '';
