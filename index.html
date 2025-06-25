@@ -5,7 +5,6 @@
   <title>H1 Grade Simulator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* 既存CSSそのまま */
     body {
       background: #f4f6fb;
       font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
@@ -185,7 +184,6 @@
       <label>Test 4 (out of 20) <input type="number" id="sci4" min="0" max="20"></label>
       <label>Test 5 (out of 20) <input type="number" id="sci5" min="0" max="20"></label>
       <label>Test 6 (out of 20) <input type="number" id="sci6" min="0" max="20"></label>
-      <label>Test 7 (out of 20) <input type="number" id="sci7" min="0" max="20"></label>
       <button type="submit">Calculate</button>
     </form>
 
@@ -200,7 +198,7 @@
     </table>
   </div>
   <script>
-    // 共通: Algebra/Trigのgrade閾値
+    // Algebra/Trigのgrade閾値
     const algebraThresholds = [
       { grade: 10, min: 89.5 },
       { grade: 9, min: 79.5 },
@@ -263,13 +261,13 @@
 
     // Integrated Scienceの計算
     function calculateScience() {
-      // 7つのテストを取得
+      // 6つのテストを取得
       let total = 0;
-      for (let i = 1; i <= 7; i++) {
+      for (let i = 1; i <= 6; i++) {
         total += Math.round(parseFloat(document.getElementById('sci' + i).value) || 0);
       }
-      // 140点満点を100点満点に換算
-      const score100 = total * 100 / 140;
+      // 120点満点を100点満点に換算
+      const score100 = total * 100 / 120;
 
       const resultTable = document.getElementById('resultTable');
       resultTable.innerHTML = '';
@@ -279,8 +277,8 @@
         let required = min - score100;
         required = Math.ceil(required);
 
-        // 0未満・100より大きい場合はスキップ
-        if (required < 0 || required > 100) return;
+        // 0未満・21以上の場合はスキップ
+        if (required < 0 || required >= 21) return;
         resultTable.innerHTML += `<tr><td>${grade}</td><td>${required}</td></tr>`;
         lastGradeShown = grade;
       });
