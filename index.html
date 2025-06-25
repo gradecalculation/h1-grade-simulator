@@ -5,7 +5,7 @@
   <title>H1 Grade Simulator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* --- CSSは元のままなので省略 --- */
+    /* 既存CSSそのまま */
     body {
       background: #f4f6fb;
       font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
@@ -143,36 +143,65 @@
         font-size: 0.95rem;
       }
     }
+    .mode-select {
+      width: 100%;
+      margin-bottom: 18px;
+      padding: 8px 6px;
+      border-radius: 7px;
+      border: 1px solid #c5d0e6;
+      font-size: 1.05rem;
+      background: #f8fafc;
+      color: #2a3b4c;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>H1 Grade Simulator</h1>
-    <h2>Algebra / Trig</h2>
+    <select class="mode-select" id="modeSelect" onchange="switchMode()">
+      <option value="algebra">Algebra / Trig</option>
+      <option value="science">Integrated Science</option>
+    </select>
+    <h2 id="modeTitle">Algebra / Trig</h2>
     <div class="notice">
       Note: There is a slight chance of this grade simulation to be incorrect. We cannot take responsibility for any errors. If you find a mistake, please report it to hg4220177@hiroogakuen.com.<br><br>
       Please also note that, due to the position where rounding is applied in this system, there may be a difference of a few points from the actual result.
     </div>
-    <form id="gradeForm" onsubmit="event.preventDefault(); calculate();">
+
+    <!-- Algebra/Trig Form -->
+    <form id="algebraForm" onsubmit="event.preventDefault(); calculateAlgebra();">
       <label>Midterm (%) <input type="number" id="midterm" min="0" max="100"></label>
       <label>Webassign (%) <input type="number" id="webassign" min="0" max="100"></label>
       <label>In-class test (out of 10) <input type="number" id="inclass" min="0" max="10"></label>
       <label>Notebook (out of 5) <input type="number" id="notebook" min="0" max="5"></label>
       <button type="submit">Calculate</button>
     </form>
+
+    <!-- Integrated Science Form -->
+    <form id="scienceForm" style="display:none;" onsubmit="event.preventDefault(); calculateScience();">
+      <label>Test 1 (out of 20) <input type="number" id="sci1" min="0" max="20"></label>
+      <label>Test 2 (out of 20) <input type="number" id="sci2" min="0" max="20"></label>
+      <label>Test 3 (out of 20) <input type="number" id="sci3" min="0" max="20"></label>
+      <label>Test 4 (out of 20) <input type="number" id="sci4" min="0" max="20"></label>
+      <label>Test 5 (out of 20) <input type="number" id="sci5" min="0" max="20"></label>
+      <label>Test 6 (out of 20) <input type="number" id="sci6" min="0" max="20"></label>
+      <label>Test 7 (out of 20) <input type="number" id="sci7" min="0" max="20"></label>
+      <button type="submit">Calculate</button>
+    </form>
+
     <table>
       <thead>
         <tr>
           <th>Grade</th>
-          <th>Points required in Final</th>
+          <th>Points required</th>
         </tr>
       </thead>
       <tbody id="resultTable"></tbody>
     </table>
   </div>
   <script>
-    // Grade thresholds (3～10まで)
-    const thresholds = [
+    // 共通: Algebra/Trigのgrade閾値
+    const algebraThresholds = [
       { grade: 10, min: 89.5 },
       { grade: 9, min: 79.5 },
       { grade: 8, min: 69.5 },
@@ -182,8 +211,25 @@
       { grade: 4, min: 29.5 },
       { grade: 3, min: 19.5 }
     ];
+    // Scienceのgrade閾値
+    const scienceThresholds = [
+      { grade: 10, min: 89.5 },
+      { grade: 9, min: 79.5 },
+      { grade: 8, min: 69.5 },
+      { grade: 7, min: 59.5 },
+      { grade: 6, min: 49.5 }
+    ];
 
-    function calculate() {
+    function switchMode() {
+      const mode = document.getElementById('modeSelect').value;
+      document.getElementById('algebraForm').style.display = (mode === 'algebra') ? '' : 'none';
+      document.getElementById('scienceForm').style.display = (mode === 'science') ? '' : 'none';
+      document.getElementById('modeTitle').textContent = (mode === 'algebra') ? "Algebra / Trig" : "Integrated Science";
+      document.getElementById('resultTable').innerHTML = '';
+    }
+
+    // Algebra/Trigの計算
+    function calculateAlgebra() {
       const midterm = parseFloat(document.getElementById('midterm').value) || 0;
       const webassign = parseFloat(document.getElementById('webassign').value) || 0;
       const inclass = parseFloat(document.getElementById('inclass').value) || 0;
@@ -198,28 +244,52 @@
 
       const resultTable = document.getElementById('resultTable');
       resultTable.innerHTML = '';
-
       let lastGradeShown = null;
 
-      thresholds.forEach(({ grade, min }) => {
-        // Calculate required final score
+      algebraThresholds.forEach(({ grade, min }) => {
         let required = (min - currentScore) / 0.3;
         required = Math.ceil(required);
 
-        // 0未満・100より大きい場合はスキップ
         if (required < 0 || required > 100) return;
-
         resultTable.innerHTML += `<tr><td>${grade}</td><td>${required}</td></tr>`;
         lastGradeShown = grade;
       });
 
-      // 最後に表示されたGradeが3以外の場合のみ、その下のGradeと0を追加
       if (lastGradeShown !== null && lastGradeShown > 3) {
         const nextGrade = lastGradeShown - 1;
         resultTable.innerHTML += `<tr><td>${nextGrade}</td><td>0</td></tr>`;
       }
     }
-    // 初期表示はしない
+
+    // Integrated Scienceの計算
+    function calculateScience() {
+      // 7つのテストを取得
+      let total = 0;
+      for (let i = 1; i <= 7; i++) {
+        total += Math.round(parseFloat(document.getElementById('sci' + i).value) || 0);
+      }
+      // 140点満点を100点満点に換算
+      const score100 = total * 100 / 140;
+
+      const resultTable = document.getElementById('resultTable');
+      resultTable.innerHTML = '';
+      let lastGradeShown = null;
+
+      scienceThresholds.forEach(({ grade, min }) => {
+        let required = min - score100;
+        required = Math.ceil(required);
+
+        // 0未満・100より大きい場合はスキップ
+        if (required < 0 || required > 100) return;
+        resultTable.innerHTML += `<tr><td>${grade}</td><td>${required}</td></tr>`;
+        lastGradeShown = grade;
+      });
+
+      if (lastGradeShown !== null && lastGradeShown > 6) {
+        const nextGrade = lastGradeShown - 1;
+        resultTable.innerHTML += `<tr><td>${nextGrade}</td><td>0</td></tr>`;
+      }
+    }
   </script>
 </body>
 </html>
