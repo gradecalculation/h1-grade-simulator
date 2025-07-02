@@ -237,7 +237,7 @@
 
       // 各項目ごとにMath.roundを適用
       const currentScore =
-        Math.round(midterm * 0.3 + webassign * 0.25 + inclass + notebook);
+        Math.round(midterm * 0.3 + webassign * 0.25 + inclass + notebook)-1;
 
       const resultTable = document.getElementById('resultTable');
       resultTable.innerHTML = '';
