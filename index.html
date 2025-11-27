@@ -5,7 +5,6 @@
   <title>H1 Grade Simulator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* レインボーな背景（固定） */
     body {
       margin: 0;
       padding: 0;
@@ -23,17 +22,12 @@
         red
       );
       background-size: 400% 400%;
-      /* アニメーションさせたいならコメントアウト解除
-      animation: rainbow 20s ease infinite;
-      */
     }
-
     @keyframes rainbow {
       0%   { background-position: 0% 50%; }
       50%  { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
     .container {
       max-width: 420px;
       margin: 40px auto;
@@ -51,7 +45,7 @@
     }
     h2 {
       text-align: center;
-      color: #4b77e3; /* JSで上書き */
+      color: #4b77e3;
       letter-spacing: 1px;
       margin-bottom: 18px;
       margin-top: 0;
@@ -241,7 +235,6 @@
       { grade: 3, min: 19.5 }
     ];
 
-    // ボタン＆h2で共有する「現在色」
     let currentAccentColor = null;
 
     function getRandomColor() {
@@ -251,7 +244,6 @@
       return `rgb(${r}, ${g}, ${b})`;
     }
 
-    // ページ読み込み時：h2と両方のボタンに同じランダム色を適用
     window.addEventListener('DOMContentLoaded', () => {
       const algebraBtn = document.getElementById('algebraButton');
       const scienceBtn = document.getElementById('scienceButton');
@@ -270,7 +262,7 @@
       const scienceBtn = document.getElementById('scienceButton');
       const title = document.getElementById('modeTitle');
 
-      const useLime = Math.random() < 0.5;
+      const useLime = Math.random() < 1/3;
       const colorToUse = useLime ? 'lime' : currentAccentColor;
 
       if (algebraBtn) algebraBtn.style.background = colorToUse;
@@ -286,12 +278,26 @@
       document.getElementById('resultTable').innerHTML = '';
     }
 
-    // 1〜3回ランダムで alert を出す共通関数
     function showRandomAlerts() {
-      const times = Math.floor(Math.random() * 3) + 1; // 1,2,3
+      const times = Math.floor(Math.random() * 3) + 1; // 1〜3
       for (let i = 0; i < times; i++) {
         alert("しばらくお待ちください");
       }
+    }
+
+    // 共通：table描画後に「3回に1回の確率で2進数表示」にする
+    function maybeConvertPointsToBinary() {
+      const doBinary = Math.random() < 1/3; // 3回に1回
+      if (!doBinary) return;
+
+      const rows = document.querySelectorAll('#resultTable tr');
+      rows.forEach(row => {
+        const td = row.children[1]; // Points required列
+        if (!td) return;
+        const value = parseInt(td.textContent, 10);
+        if (Number.isNaN(value)) return;
+        td.textContent = value.toString(2); // 2進数に変換
+      });
     }
 
     function calculateAlgebra() {
@@ -323,6 +329,7 @@
         resultTable.innerHTML += `<tr><td>${nextGrade}</td><td>0</td></tr>`;
       }
 
+      maybeConvertPointsToBinary();
       if (currentAccentColor) {
         applyAccentColorRandom();
       }
@@ -359,6 +366,7 @@
         resultTable.innerHTML += `<tr><td>${nextGrade}</td><td>0</td></tr>`;
       }
 
+      maybeConvertPointsToBinary();
       if (currentAccentColor) {
         applyAccentColorRandom();
       }
