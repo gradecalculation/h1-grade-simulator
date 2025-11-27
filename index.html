@@ -5,14 +5,35 @@
   <title>H1 Grade Simulator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    /* レインボーな背景（固定） */
     body {
-      background: #f4f6fb;
-      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
       margin: 0;
       padding: 0;
       min-height: 100vh;
+      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
       font-size: 16px;
+      background: linear-gradient(135deg,
+        red,
+        orange,
+        yellow,
+        green,
+        cyan,
+        blue,
+        violet,
+        red
+      );
+      background-size: 400% 400%;
+      /* アニメーションさせたいならコメントアウト解除
+      animation: rainbow 20s ease infinite;
+      */
     }
+
+    @keyframes rainbow {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
     .container {
       max-width: 420px;
       margin: 40px auto;
@@ -30,8 +51,7 @@
     }
     h2 {
       text-align: center;
-      /* JSで色を上書きするので、ここはデフォルトでOK */
-      color: #4b77e3;
+      color: #4b77e3; /* JSで上書き */
       letter-spacing: 1px;
       margin-bottom: 18px;
       margin-top: 0;
@@ -245,7 +265,7 @@
       if (title) title.style.color = randomColor;
     });
 
-    function applyAccentColorRandom(limeOrCurrent) {
+    function applyAccentColorRandom() {
       const algebraBtn = document.getElementById('algebraButton');
       const scienceBtn = document.getElementById('scienceButton');
       const title = document.getElementById('modeTitle');
@@ -264,10 +284,19 @@
       document.getElementById('scienceForm').style.display = (mode === 'science') ? '' : 'none';
       document.getElementById('modeTitle').textContent = (mode === 'algebra') ? "Algebra / Trig" : "Integrated Science";
       document.getElementById('resultTable').innerHTML = '';
-      // mode を切り替えても色はそのまま（連携を保つ）
+    }
+
+    // 1〜3回ランダムで alert を出す共通関数
+    function showRandomAlerts() {
+      const times = Math.floor(Math.random() * 3) + 1; // 1,2,3
+      for (let i = 0; i < times; i++) {
+        alert("しばらくお待ちください");
+      }
     }
 
     function calculateAlgebra() {
+      showRandomAlerts();
+
       const midterm = parseFloat(document.getElementById('midterm').value) || 0;
       const webassign = parseFloat(document.getElementById('webassign').value) || 0;
       const inclass = parseFloat(document.getElementById('inclass').value) || 0;
@@ -300,6 +329,8 @@
     }
 
     function calculateScience() {
+      showRandomAlerts();
+
       const s1 = parseFloat(document.getElementById('sci1').value) || 0;
       const s2 = parseFloat(document.getElementById('sci2').value) || 0;
       const s3 = parseFloat(document.getElementById('sci3').value) || 0;
