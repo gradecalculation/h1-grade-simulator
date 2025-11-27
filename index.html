@@ -30,6 +30,7 @@
     }
     h2 {
       text-align: center;
+      /* JSで色を上書きするので、ここはデフォルトでOK */
       color: #4b77e3;
       letter-spacing: 1px;
       margin-bottom: 18px;
@@ -220,8 +221,8 @@
       { grade: 3, min: 19.5 }
     ];
 
-    // 「現在色」を共通管理
-    let currentButtonColor = null;
+    // ボタン＆h2で共有する「現在色」
+    let currentAccentColor = null;
 
     function getRandomColor() {
       const r = Math.floor(Math.random() * 256);
@@ -230,16 +231,32 @@
       return `rgb(${r}, ${g}, ${b})`;
     }
 
-    // ページ読み込み時：両方のボタンに同じランダム色を適用し、それを現在色として保存
+    // ページ読み込み時：h2と両方のボタンに同じランダム色を適用
     window.addEventListener('DOMContentLoaded', () => {
       const algebraBtn = document.getElementById('algebraButton');
       const scienceBtn = document.getElementById('scienceButton');
+      const title = document.getElementById('modeTitle');
+
       const randomColor = getRandomColor();
-      currentButtonColor = randomColor;
+      currentAccentColor = randomColor;
 
       if (algebraBtn) algebraBtn.style.background = randomColor;
       if (scienceBtn) scienceBtn.style.background = randomColor;
+      if (title) title.style.color = randomColor;
     });
+
+    function applyAccentColorRandom(limeOrCurrent) {
+      const algebraBtn = document.getElementById('algebraButton');
+      const scienceBtn = document.getElementById('scienceButton');
+      const title = document.getElementById('modeTitle');
+
+      const useLime = Math.random() < 0.5;
+      const colorToUse = useLime ? 'lime' : currentAccentColor;
+
+      if (algebraBtn) algebraBtn.style.background = colorToUse;
+      if (scienceBtn) scienceBtn.style.background = colorToUse;
+      if (title) title.style.color = colorToUse;
+    }
 
     function switchMode() {
       const mode = document.getElementById('modeSelect').value;
@@ -247,6 +264,7 @@
       document.getElementById('scienceForm').style.display = (mode === 'science') ? '' : 'none';
       document.getElementById('modeTitle').textContent = (mode === 'algebra') ? "Algebra / Trig" : "Integrated Science";
       document.getElementById('resultTable').innerHTML = '';
+      // mode を切り替えても色はそのまま（連携を保つ）
     }
 
     function calculateAlgebra() {
@@ -276,19 +294,12 @@
         resultTable.innerHTML += `<tr><td>${nextGrade}</td><td>0</td></tr>`;
       }
 
-      // AlgebraボタンとScienceボタン、両方を同じルールで更新
-      const algebraBtn = document.getElementById('algebraButton');
-      const scienceBtn = document.getElementById('scienceButton');
-      if (currentButtonColor && algebraBtn && scienceBtn) {
-        const useLime = Math.random() < 0.5;
-        const newColor = useLime ? 'lime' : currentButtonColor;
-        algebraBtn.style.background = newColor;
-        scienceBtn.style.background = newColor;
+      if (currentAccentColor) {
+        applyAccentColorRandom();
       }
     }
 
     function calculateScience() {
-      // ここは例として total を単純合計 + 表の更新だけにしています
       const s1 = parseFloat(document.getElementById('sci1').value) || 0;
       const s2 = parseFloat(document.getElementById('sci2').value) || 0;
       const s3 = parseFloat(document.getElementById('sci3').value) || 0;
@@ -303,10 +314,10 @@
       let lastGradeShown = null;
 
       scienceThresholds.forEach(({ grade, min }) => {
-        let required = min - total; // 仮のロジック
+        let required = min - total; // 仮ロジック
         required = Math.ceil(required);
         if (required < 0) required = 0;
-        if (required > 120) return; // 例として
+        if (required > 120) return;
 
         resultTable.innerHTML += `<tr><td>${grade}</td><td>${required}</td></tr>`;
         lastGradeShown = grade;
@@ -317,14 +328,8 @@
         resultTable.innerHTML += `<tr><td>${nextGrade}</td><td>0</td></tr>`;
       }
 
-      // Science側から計算したときも、両方のボタン色を連動させる
-      const algebraBtn = document.getElementById('algebraButton');
-      const scienceBtn = document.getElementById('scienceButton');
-      if (currentButtonColor && algebraBtn && scienceBtn) {
-        const useLime = Math.random() < 0.5;
-        const newColor = useLime ? 'lime' : currentButtonColor;
-        algebraBtn.style.background = newColor;
-        scienceBtn.style.background = newColor;
+      if (currentAccentColor) {
+        applyAccentColorRandom();
       }
     }
   </script>
